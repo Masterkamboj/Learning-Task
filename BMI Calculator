@@ -1,0 +1,148 @@
+"""
+BMI Index Calculator
+A simple calculator to compute Body Mass Index (BMI) and categorize health status.
+"""
+
+
+def calculate_bmi(weight_kg, height_m):
+    """
+    Calculate BMI given weight in kilograms and height in meters.
+    
+    Args:
+        weight_kg (float): Weight in kilograms
+        height_m (float): Height in meters
+        
+    Returns:
+        float: Calculated BMI value
+    """  
+    if height_m <= 0 or weight_kg <= 0:
+        raise ValueError("Weight and height must be positive values")
+    
+    bmi = weight_kg / (height_m ** 2)
+    return round(bmi, 2)
+
+
+def get_bmi_category(bmi):
+    """
+    Categorize BMI value into health status categories.
+    
+    Args:
+        bmi (float): BMI value
+        
+    Returns:
+        str: BMI category (Underweight, Normal weight, Overweight, or Obese)
+    """
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 25:
+        return "Normal weight"
+    elif 25 <= bmi < 30:
+        return "Overweight"
+    else:
+        return "Obese"
+
+
+def convert_height_to_meters(feet, inches=0):
+    """
+    Convert height from feet and inches to meters.
+    
+    Args:
+        feet (int): Height in feet
+        inches (int): Additional inches (default: 0)
+        
+    Returns:
+        float: Height in meters
+    """
+    total_inches = (feet * 12) + inches
+    height_m = total_inches * 0.0254
+    return round(height_m, 2)
+
+
+def convert_pounds_to_kg(pounds):
+    """
+    Convert weight from pounds to kilograms.
+    
+    Args:
+        pounds (float): Weight in pounds
+        
+    Returns:
+        float: Weight in kilograms
+    """
+    kg = pounds * 0.453592
+    return round(kg, 2)
+
+
+def print_bmi_report(weight_kg, height_m, bmi, category):
+    """
+    Print a formatted BMI report.
+    
+    Args:
+        weight_kg (float): Weight in kilograms
+        height_m (float): Height in meters
+        bmi (float): Calculated BMI value
+        category (str): BMI category
+    """
+    print("\n" + "=" * 40)
+    print("            BMI CALCULATION REPORT       ")
+    print("=" * 40)
+    print(f"Weight: {weight_kg} kg")
+    print(f"Height: {height_m} m")
+    print(f"BMI: {bmi}")
+    print(f"Category: {category}")
+    print("=" * 40 + "\n")
+
+
+def main():
+    """
+    Main function to run the BMI calculator with user input.
+    """
+    print("\n" + "=" * 40)
+    print("        BMI INDEX CALCULATOR           ")
+    print("=" * 40)
+    print("\nChoose measurement units:")
+    print("1. Metric (kg and meters)")
+    print("2. Imperial (pounds and feet/inches)")
+    
+    choice = input("\nEnter your choice (1 or 2): ").strip()
+    
+    try:
+        if choice == "1":
+            # Metric system
+            weight_kg = float(input("Enter your weight (kg): "))
+            height_m = float(input("Enter your height (m): "))
+        elif choice == "2":
+            # Imperial system
+            pounds = float(input("Enter your weight (pounds): "))
+            feet = int(input("Enter your height (feet): "))
+            inches = int(input("Enter additional inches (0 if none): "))
+            
+            weight_kg = convert_pounds_to_kg(pounds)
+            height_m = convert_height_to_meters(feet, inches)
+            
+            print(f"\nConverted - Weight: {weight_kg} kg, Height: {height_m} m")
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+            return
+        
+        # Calculate BMI
+        bmi = calculate_bmi(weight_kg, height_m)
+        category = get_bmi_category(bmi)
+        
+        # Display report
+        print_bmi_report(weight_kg, height_m, bmi, category)
+        
+        # Health recommendations
+        print("BMI Categories:")
+        print("  Underweight: BMI < 18.5")
+        print("  Normal weight: 18.5 ≤ BMI < 25")
+        print("  Overweight: 25 ≤ BMI < 30")
+        print("  Obese: BMI ≥ 30")
+        
+    except ValueError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+if __name__ == "__main__":
+    main()
